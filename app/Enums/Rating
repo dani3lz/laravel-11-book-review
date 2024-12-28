@@ -1,9 +1,0 @@
-<?php 
-
-namespace App\Enums;
-
-enum Rating
-{
-    case GOOD;
-    case BAD;
-}
