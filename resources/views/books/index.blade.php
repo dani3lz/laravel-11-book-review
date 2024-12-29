@@ -60,5 +60,5 @@
         @include('books.books-list')
     </ul>
     <div id="loading" class="hidden text-center py-4">Loading...</div>
-    @include('scripts.infinite-loading')
+    @include('scripts.infinite-loading-books')
 @endsection
