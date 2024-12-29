@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Book Reviews</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 
   {{-- blade-formatter-disable --}}
   <style type="text/tailwindcss">
@@ -17,15 +18,19 @@
     }
 
     .filter-container {
-      @apply mb-4 flex space-x-2 rounded-md bg-slate-100 p-2;
+      @apply appearance-none w-2/6 py-2 px-3 text-slate-700 leading-tight focus:border-slate-300 focus:ring-0 rounded-md border-slate-300;
+    }
+
+    .date-picker-container {
+      @apply appearance-none w-2/3;
+    }
+
+    .date-picker {
+      @apply appearance-none border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 text-slate-700 focus:border-slate-300 focus:ring-0
     }
 
     .filter-item {
-      @apply flex w-full items-center justify-center rounded-md px-4 py-2 text-center text-sm font-medium text-slate-500;
-    }
-
-    .filter-item-active {
-      @apply bg-white shadow-sm text-slate-800 flex w-full items-center justify-center rounded-md px-4 py-2 text-center text-sm font-medium;
+      @apply px-4 py-2 text-sm font-medium text-slate-500;
     }
 
     .book-item {
