@@ -2,12 +2,18 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Book Reviews</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <meta charset="UTF-8">
+    <title>
+        @hasSection('page-title')
+            @yield('page-title')
+        @else
+            Laravel-11-book-review
+        @endif
+    </title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 
-  {{-- blade-formatter-disable --}}
+    {{-- blade-formatter-disable --}}
   <style type="text/tailwindcss">
     .btn {
       @apply bg-white rounded-md px-4 py-2 text-center font-medium text-slate-500 shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50 h-10;
@@ -18,7 +24,7 @@
     }
 
     .filter-container {
-      @apply appearance-none w-2/6 py-2 px-3 text-slate-700 leading-tight focus:border-slate-300 focus:ring-0 rounded-md border-slate-300;
+      @apply appearance-none w-2/6 py-2 px-3 text-slate-700 leading-tight focus:border-slate-300 focus:ring-0 rounded-md border-slate-300 leading-snug;
     }
 
     .date-picker-container {
@@ -64,12 +70,20 @@
     .reset-link {
       @apply text-slate-500 underline;
     }
+
+    .review-label {
+      @apply block uppercase text-slate-700 mb-2
+    }
+    
+    textarea {
+      @apply shadow-sm appearance-none border w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none
+    }
   </style>
   {{-- blade-formatter-enable --}}
 </head>
 
 <body class="container mx-auto mt-10 mb-10 max-w-3xl">
-  @yield('content')
+    @yield('content')
 </body>
 
 </html>

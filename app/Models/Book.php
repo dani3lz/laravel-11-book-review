@@ -24,33 +24,40 @@ class Book extends Model
     public function scopeOrderLatest(Builder $querry, $from = null, $to = null): Builder
     {
         return $querry
-            ->where(fn(Builder $q) => $this->dateRangeFilter($q, $from, $to))
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
+            ->fetchBooks($from, $to)
             ->orderBy('created_at', 'desc');
     }
 
     public function scopePopular(Builder $querry, $from = null, $to = null): Builder
     {
         return $querry
-            ->where(fn(Builder $q) => $this->dateRangeFilter($q, $from, $to))
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
+            ->fetchBooks($from, $to)
             ->orderBy('reviews_count', 'desc');
     }
 
     public function scopeByRating(Builder $querry, Rating $option, $from = null, $to = null): Builder
     {
         return $querry
-            ->where(fn(Builder $q) => $this->dateRangeFilter($q, $from, $to))
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
+            ->fetchBooks($from, $to)
             ->orderBy('reviews_avg_rating', $option->value);
     }
 
     public function scopeMinReviews(Builder $query, $minReviews): Builder
     {
         return $query->having('reviews_count', '>=', $minReviews);
+    }
+
+    public function scopeWithRangeDate(Builder $querry, $from = null, $to = null)
+    {
+        return $querry->where(fn(Builder $q) => $this->dateRangeFilter($q, $from, $to));
+    }
+
+    public function scopeFetchBooks(Builder $querry, $from = null, $to = null)
+    {
+        return $querry
+            ->withRangeDate($from, $to)
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating');
     }
 
     private function dateRangeFilter(Builder $q, $from = null, $to = null)

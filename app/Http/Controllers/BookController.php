@@ -34,72 +34,40 @@ class BookController extends Controller
             fn($query, $title) => $query->title($title)
         );
 
-        $filter_selected = $request->get('filter');
-
-        $books = match ($filter_selected) {
+        $books = match ($request->get('filter')) {
             Filters::POPULAR->value => $books->popular($date_start, $date_end),
             Filters::HIGHEST->value => $books->byRating(Rating::GOOD, $date_start, $date_end),
             Filters::LOWEST->value => $books->byRating(Rating::BAD, $date_start, $date_end),
             default => $books->orderLatest($date_start, $date_end)
         };
-        $books = $books->get();
+        $books = $books->paginate(15);
 
-        return view('books.index', [
-            'books' => $books,
-            'filters' => $filters,
-            'filter_selected' => $filter_selected
-        ]);
-    }
+        if ($request->ajax()) {
+            if ($books->isEmpty()) {
+                return '';
+            }
+            return view('books.books-list', compact('books'))->render();
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('books.index', compact('books', 'filters'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    public function show(Request $request, int $id)
     {
-        return view('books.show', [ 'book' => $book->load([
-            'reviews' => fn($query) => $query->latest()
-            //'reviews_count' => fn($query) => $query->withCount('title')
-        ])]);
-    }
+        $book = Book::with([
+            'reviews' => fn($query) => $query->latest()->paginate(10)
+        ])->fetchBooks()->findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if ($request->ajax()) {
+            if ($book->reviews->isEmpty()) {
+                return '';
+            }
+            return view('books.reviews.reviews-list', compact('book'))->render();
+        }    
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Book $book)
-    {
-        $book->delete();
-        return redirect()->route('books.index');
+        return view('books.show', compact('book'));
     }
 }
